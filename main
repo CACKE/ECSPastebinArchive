@@ -1,0 +1,59 @@
+local function monitorFind()
+  local PeriList = peripheral.getNames()
+  for i=1,#PeriList do
+    if peripheral.getType(PeriList[i]) == "monitor" then
+      return PeriList[i]
+    end
+  end
+end
+ 
+local m = monitorFind()
+if m == nil then
+  m = term
+else
+  m = peripheral.wrap(m)
+  m.setTextScale(1)
+end
+ 
+local xSize,ySize = m.getSize();
+local centerX = math.floor(xSize/2)
+local centerY = math.floor(ySize/2)
+ 
+m.setBackgroundColor(colors.blue)
+m.clear();
+ 
+local function text(x,y,text,tcolor,bcolor)
+  m.setTextColor(tcolor)
+  m.setBackgroundColor(bcolor)
+  m.setCursorPos(x,y)
+  m.write(text)
+end
+ 
+local Massiv = {
+  "An error has occured. To continue:",
+  " ",
+  "Press Enter to return to Windows, or",
+  " ",
+  "Press CTRL+ALT+DEL to restart your computer. If you do this,",
+  "you will lose any unsaved information in all open applications",
+  " ",
+  "Error: x0014MAMKYEBAL228",
+ 
+}
+ 
+local posY = centerY-math.floor((#Massiv+2)/2)
+text(centerX - 4, posY," Windows ",colors.blue,colors.white)
+posY = posY + 2
+for i=1,#Massiv do
+  text(centerX-28,posY,Massiv[i],colors.white,colors.blue)
+  posY=posY+1
+end
+posY = posY + 1
+local text1 = "Press any key to continue"
+text(centerX-math.floor(#text1/2),posY,text1,colors.white,colors.blue)
+ 
+os.pullEvent("key")
+ 
+m.setBackgroundColor(colors.black)
+m.setCursorPos(1,1)
+m.clear()
